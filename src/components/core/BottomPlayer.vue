@@ -9,64 +9,59 @@
         <div class="bottom-plyr">
             <div class="bottom-plyr__media">
                 <div class="bottom-plyr__img">
-                    <img :src="tracks[currentTrackId].imgUrl" alt="image">
+                    <img :src="selectedTrack.imgUrl" alt="image">
                 </div>
                 <div class="bottom-plyr__content">
-                    <div class="title black--text">{{ tracks[currentTrackId].title }}</div>
-                    <div class="subtitle black--text">{{ tracks[currentTrackId].artist }}</div>
+                    <div class="title black--text">{{ selectedTrack.title }}</div>
+                    <div class="subtitle black--text">{{ selectedTrack.artist }}</div>
                 </div>
             </div>
             <div class="bottom-plyr__btns">
-                <v-btn
-                    ref="prevBtn"
+                <!-- <v-btn
                     icon
-                    @click="playPrevSong()"
                 >
                     <v-icon class="icon">mdi-skip-previous</v-icon>
-                </v-btn>
+                </v-btn> -->
 
-                <v-btn
+                <!-- <v-btn
                     v-if="isPlaying"
                     icon
-                    @click="pauseSong()"
                 >
                     <v-icon class="icon">mdi-pause</v-icon>
                 </v-btn>
                 <v-btn
                     v-else
                     icon
-                    @click="playCurrentSong()"
                 >
                     <v-icon class="icon">mdi-play</v-icon>
-                </v-btn>
+                </v-btn> -->
 
-                <v-btn
-                    ref="nextBtn"
+                <!-- <v-btn
                     icon
-                    @click="playNextSong()"
                 >
                     <v-icon class="icon">mdi-skip-next</v-icon>
-                </v-btn>
+                </v-btn> -->
+            </div>
+
+            <div>
+                <vuetify-audio :file="selectedTrack.src" color="btnColor" :ended="audioFinish" downloadable></vuetify-audio>
             </div>
         </div>
     </v-bottom-navigation>
 </template>
 
 <script>
+import VuetifyAudio from 'vuetify-audio'
+import { mapState } from 'vuex'
+
 export default {
     components: {
+        'vuetify-audio': VuetifyAudio,
     },
 
-    filters: {
-        doubleDigits(val) {
-            if (!val) return ""
-            else return parseFloat((val / 10).toFixed(2));
-
-        }
-    },
 
     computed: {
-        // ...mapState([ 'tracks' ])
+        ...mapState(['selectedTrack'])
     },
 
     created() {

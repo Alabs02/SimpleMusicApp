@@ -109,26 +109,26 @@
             <v-row>
                 <v-col cols="7" class="pl-12 pt-12">
                     <div class="title text-capitalize black--text pb-6" style="font-weight: bold;">Top Songs</div>
-                <div v-for="(item, n) in tracks" :key="n" class="music-card accent mb-4">
+                <div v-for="(track, n) in tracks" :key="n" class="music-card accent mb-4">
                         <div class="music-card__body">
                             <div class="music-card__media">
-                                <img :src="item.imgUrl" alt="image" />
+                                <img :src="track.imgUrl" alt="image" />
                             </div>
 
                             <div class="music-card__content">
-                                <div class="music-card__title" v-text="item.title"></div>
-                                <div class="music-card__subtitle" v-text="item.artist"></div>
+                                <div class="music-card__title" v-text="track.title"></div>
+                                <div class="music-card__subtitle" v-text="track.artist"></div>
                             </div>
                         </div>
                     
-                    <div class="music-card__length" v-text="item.length"></div>
+                    <div class="music-card__length">33:33</div>
 
                     <div class="music-card__play">
                         <v-btn
                                 icon
                                 large
                                 color="btnColor"
-                                @click="item.press"
+                                @click="playTrack(track)"
                             >
                                 <v-icon>mdi-play</v-icon>
                             </v-btn>
@@ -206,7 +206,7 @@ export default {
     },
 
     computed: {
-        ...mapState(['userProfile', 'username', 'tracks']),
+        ...mapState(['userProfile', 'username', 'tracks', 'selectedTrack']),
     },
 
     created() {
@@ -270,6 +270,17 @@ export default {
         //     })
         //     .catch(err => console.error("An error occured: ", err))
         // },
+
+        playTrack(track) {
+            var vm = this
+            vm.$store.dispatch('playSong', {
+                title: track.title,
+                artist: track.artist,
+                imgUrl: track.imgUrl,
+                src: track.path,
+            })
+            console.log("Track Object", track)
+        },
 
         logout() {
             var vm = this;

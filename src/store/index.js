@@ -19,6 +19,13 @@ export default new Vuex.Store({
         isPlaying: false,
         isPaused: false,
         isStopped: false,
+        
+        selectedTrack: {
+            title: "",
+            artist: "",
+            imgUrl: "",
+            src: ""
+        }
 
     },
 
@@ -35,8 +42,20 @@ export default new Vuex.Store({
         SET_TRACK_LIST(state, payload) {
             state.tracks = payload
         },
+
+        UPDATE_TRACK(state, payload) {
+            state.selectedTrack.title = payload.title,
+            state.selectedTrack.artist = payload.artist,
+            state.selectedTrack.imgUrl = payload.imgUrl,
+            state.selectedTrack.src = payload.src
+        }
+
     },
     actions: {
+        loadTrack({ commit }, data) {
+            console.log("Data track in state: ", data)
+            commit('UPDATE_TRACK', data)
+        },
         // Login logic
         async login({ dispatch }, form) {
             console.log(form);
