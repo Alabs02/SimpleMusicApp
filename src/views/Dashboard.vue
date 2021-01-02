@@ -7,6 +7,7 @@
             <div class="header">
                 <div class="header__bar">
                     <v-text-field
+                        v-model.trim="searchQuery"
                         flat
                         hide-details
                         prepend-inner-icon="mdi-magnify"
@@ -14,6 +15,7 @@
                         solo
                         class="header__search"
                         style="::placeholder { font-weight: 800; !important}"
+                        @keydown.enter="searchDB"
                     ></v-text-field>
                 </div>
 
@@ -191,7 +193,7 @@
 import Drawer from '@/components/core/Drawer';
 import BottomPlayer from '@/components/core/BottomPlayer';
 import { mapState } from 'vuex'
-import axios from 'axios'
+import unirest from 'unirest'
 
 export default {
     components: {
@@ -214,6 +216,7 @@ export default {
 
     data() {
         return {
+            searchQuery: "",
             navBtns: [
                 { icon:"mdi-bell-outline",  press: () => {} },
                 { icon:"mdi-cog",  press: () => {} },
@@ -247,6 +250,32 @@ export default {
     },
 
     methods: {
+        searchDB() {
+            const vm = this
+            const endoint = "https://devru-raaga-v1.p.rapidapi.com/json/search-v2.asp"
+            const headerConfig =  {
+                "x-rapidapi-key": "968dd772d6msh591761573daa5f2p1b563fjsn1a046578cf68",
+                "x-rapidapi-host": "devru-raaga-v1.p.rapidapi.com",
+                "useQueryString": true,
+                "Access-Control-Allow-Origin":  "http://127.0.0.1:8081",
+                mode: 'no-cors'
+            }
+            const formData = {
+                "l": "E",
+                "c": "500",
+                "p": "1",
+                "q": vm.searchQuery
+            }
+            const req = unirest("GET", endoint)
+            console.log(req.headers)
+            req.query(formData)
+            req.headers(headerConfig)
+            req.end(res => {
+                if (res.error) throw new Error(res.error)
+                
+                console.log('API RESPONSE', res.body)
+            })
+        },
         forceFileDownload(response) {
             const url = window.URL.createObjectURL(new Blob([response.data]))
             const link = document.createElement('a')
