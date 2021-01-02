@@ -20,7 +20,7 @@
             
             <v-sheet class="main__sheet" max-width="100%" elevation="3">
                 <v-row>
-                    <v-col cols="7">
+                    <v-col sm="12" md="7" cols="12">
                         <v-container class="px-6">
                             <v-card-text class="title black--text">Start using MuseOn</v-card-text>
                             <v-card-text class="body-1 secondary--text">Use an existing account</v-card-text>
@@ -81,8 +81,7 @@
                                     class="white--text mb-4"
                                     rounded
                                     type="submit"
-                                    :disabled="btn.disable"
-                                    :loading=btn.loading
+                                    :loading="isSignupLoading"
                                     @click="signup"
                                 >
                                     <span class="text-capitalize">Start using MuseOn</span>
@@ -91,7 +90,7 @@
                         </v-container>
                     </v-col>
 
-                    <v-col cols="5" class="accent" style="padding-right: 2rem; position: relative;">
+                    <v-col sm="12" md="5" cols="12" class="accent" style="padding-right: 2rem; position: relative;">
                         <div class="main__section secondary">
                             <div>
                                 <span class="white--text">"Music that keeps you going"</span>
@@ -106,10 +105,16 @@
 </template>
 
 <script> 
+import { mapState } from 'vuex'
 
 export default {
-    name: "Signin",
+    name: "Signup",
+
     components: {
+    },
+
+    computed: {
+        ...mapState(['isSignupLoading'])
     },
 
     data() {
@@ -256,5 +261,42 @@ export default {
         &__spotify {
             color: rgb(8, 195, 103) !important;
         }
+    }
+
+    // Mobile
+    @media screen and (min-width: 0px) and (max-width: 868px) {
+        .sheet-bar {
+            // border: 1px solid blue;
+            width: 100% !important;
+            padding: 1rem 0 !important;
+
+            &__brand {
+                width: 8rem;
+                // height: 3;
+                margin-left: .5rem !important;
+            }
+
+            &__action {
+                margin-right: .5rem !important;
+                div {
+                    display: none !important;
+                }
+            }
+        }
+        .main {
+            &__section {
+                display: none !important;
+            }
+
+            &__content {
+                width: 90%;
+                margin-top: 1rem;
+            }
+        } 
+    }
+
+    // tablet
+    @media screen and (min-width: 768px) {
+        
     }
 </style>

@@ -31,15 +31,6 @@
                         </v-btn>
                     </div>
                     <div>
-                        <!-- <v-avatar
-                            height="50"
-                            width="50"
-                            class="header__avatar"
-                        >
-                            <img src="@/assets/uk.png" alt="user avatar">
-                        </v-avatar> -->
-                        
-
                         <v-menu open-on-hover open-on-click>
                             <template v-slot:activator="{ on, attrs }">
                                 <v-avatar
@@ -106,9 +97,9 @@
                 </v-slide-group>
             </div>
 
-            <v-row>
-                <v-col cols="7" class="pl-12 pt-12">
-                    <div class="title text-capitalize black--text pb-6" style="font-weight: bold;">Top Songs</div>
+            <v-row class="px-10" style="margin-bottom: 6rem !important;">
+                <v-col sm="12" md="7" cols="12" class="pt-12">
+                    <div class="title text-capitalize black--text pb-6" style="font-weight: bold; padding-left: 2rem !important;">Top Songs</div>
                 <div v-for="(track, n) in tracks" :key="n" class="music-card accent mb-4">
                         <div class="music-card__body">
                             <div class="music-card__media">
@@ -121,35 +112,38 @@
                             </div>
                         </div>
                     
-                    <div class="music-card__length">33:33</div>
+                    <!-- <div class="music-card__length">33:33</div> -->
 
                     <div class="music-card__play">
                         <v-btn
                                 icon
                                 large
                                 color="btnColor"
-                                @click="playTrack(track)"
+                                @click="loadTrack(track)"
                             >
                                 <v-icon>mdi-play</v-icon>
                             </v-btn>
                     </div>
 
                     <div class="music-card__action">
+                        <a :href="track.path" style="text-decoration: none !important;">
                             <v-btn                            
                                 icon
                                 color="grey darken-2"
+                                @click="downloadTrack(track.path)"
                             >
                                 <v-icon>mdi-download</v-icon>
                             </v-btn>
+                        </a>  
                     </div>
                 </div>
                 </v-col>
-                <v-col cols="5" class="py-12 px-12">
+                <v-col sm="12" md="5" cols="12" class="py-12">
                     <div class="title text-capitalize pb-6 black--text" style="font-weight: bold;">Recent Playlist</div>
                     <v-card
-                        v-for="(item, i) in recentList"
+                        v-for="(track, i) in filteredTracks"
                         :key="i"
-                        :color="item.color"
+                        :color="track.color"
                         dark
                         class="mb-4"
                     >
@@ -157,20 +151,20 @@
                         <div>
                             <v-card-title
                             class="headline"
-                            v-text="item.title"
+                            v-text="track.title"
                             ></v-card-title>
 
-                            <v-card-subtitle v-text="item.artist"></v-card-subtitle>
+                            <v-card-subtitle v-text="track.artist"></v-card-subtitle>
 
                             <v-card-actions>
                             <v-btn
-                                v-if="item.artist === 'Ellie Goulding'"
                                 class="ml-2 mt-3"
                                 fab
                                 icon
                                 height="40px"
                                 right
                                 width="40px"
+                                @click="loadTrack(track)"
                             >
                                 <v-icon>mdi-play</v-icon>
                             </v-btn>
@@ -182,7 +176,7 @@
                             size="125"
                             tile
                         >
-                            <v-img :src="item.src"></v-img>
+                            <v-img :src="track.imgUrl"></v-img>
                         </v-avatar>
                         </div>
                     </v-card>
@@ -206,7 +200,12 @@ export default {
     },
 
     computed: {
-        ...mapState(['userProfile', 'username', 'tracks', 'selectedTrack']),
+        ...mapState(['userProfile', 'username', 'tracks', 'selectedTrack', 'isSigninLoading', 'isSignupLoading', 'isForgotLoading', 'isPlaying']),
+        filteredTracks() {
+            var vm = this
+            console.log(vm.tracks.filter((track) => track.isRecent == true))
+            return vm.tracks.filter((track) => track.isRecent == true)
+        }
     },
 
     created() {
@@ -222,58 +221,56 @@ export default {
 
             recommededList: [],
 
-            recentList: [
-                {
-                    color: '#952175',
-                    src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-                    title: 'Halcyon Days',
-                    artist: 'Ellie Goulding',
-                },
+            // recentList: [
+            //     {
+            //         color: '#952175',
+            //         src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
+            //         title: 'Halcyon Days',
+            //         artist: 'Ellie Goulding',
+            //     },
 
-                {
-                    color: 'blue',
-                    src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-                    title: 'Halcyon Days',
-                    artist: 'Ellie Goulding',
-                },
+            //     {
+            //         color: 'blue',
+            //         src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
+            //         title: 'Halcyon Days',
+            //         artist: 'Ellie Goulding',
+            //     },
 
-                {
-                    color: 'indigo darken-2',
-                    src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-                    title: 'Halcyon Days',
-                    artist: 'Ellie Goulding',
-                },
-            ],
+            //     {
+            //         color: 'indigo darken-2',
+            //         src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
+            //         title: 'Halcyon Days',
+            //         artist: 'Ellie Goulding',
+            //     },
+            // ],
         }
     },
 
     methods: {
-        // forceFileDownload(response) {
-        //     const url = window.URL.createObjectURL(new Blob([response.data]))
-        //     const link = document.createElement('a')
-        //         link.href = url
-        //         link.setAttribute('download', 'music.mp3')
-        //     document.body.appendChild(link)
-        //     link.click()
-        // },
+        forceFileDownload(response) {
+            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', 'music.mp3')
+            document.body.appendChild(link)
+            link.click()
+        },
 
-        // downloadTrack(url) {
-        //     axios({url:url}, {
-        //         headers: {
-        //             "Access-Control-Allow-Origin": "*",
-        //             "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-        //             "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
-        //         }
-        //     })
-        //     .then(response => {
-        //         this.forceFileDownload(response)
-        //     })
-        //     .catch(err => console.error("An error occured: ", err))
-        // },
+        downloadTrack(url) {
+            this.$http({
+                method: 'get',
+                url: url,
+                responseType: 'arraybuffer'
+            })
+            .then(response => {
+                this.forceFileDownload(response)
+            })
+            .catch(err => console.log(err))
+        },
 
-        playTrack(track) {
+        loadTrack(track) {
             var vm = this
-            vm.$store.dispatch('playSong', {
+            vm.$store.dispatch('playTrack', {
                 title: track.title,
                 artist: track.artist,
                 imgUrl: track.imgUrl,
@@ -372,8 +369,10 @@ export default {
 
             // border: 1px solid yellow;
             // padding-left: 2rem;
+            padding: 0 2rem;
             padding-top: 1rem;
             padding-bottom: 1rem;
+
 
             overflow-x: auto;
         }
@@ -466,4 +465,23 @@ export default {
             // border: 1px solid blue;
         }
     }
+
+    // mobile
+    @media screen and (min-width: 0px) and (max-width: 768px) {
+        .dashboard {
+            // flex-direction: column;
+            &__draw {
+                display: none !important;
+            }
+
+            &__section {
+                width: 100% !important;
+                // border: 1px solid red;
+                margin-left: 0% !important;
+            }
+        }
+        
+    }
+
+    
 </style>

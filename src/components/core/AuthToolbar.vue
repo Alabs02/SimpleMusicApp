@@ -55,4 +55,19 @@ export default {
             align-items: center;
         }
     }
+
+    @media screen and (min-width: 0px) and (max-width: 768px) {
+        .app-bar {
+            padding: 0 1rem;
+
+            &__brand {
+                width: 8rem;
+            }
+            &__link {
+                div {
+                    display: none !important;
+                }
+            }
+        }
+    }
 </style>

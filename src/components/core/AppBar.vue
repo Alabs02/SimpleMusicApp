@@ -34,7 +34,7 @@
                 rounded
                 outlined
                 color="black mr-2"
-                class="text-capitalize"
+                class="text-capitalize d-sm-none"
             >
                 <v-img
                 width="20"
@@ -120,6 +120,19 @@ export default {
     }
     #flag {
         border-radius: 50% !important;
+    }
+
+    @media screen and (min-width: 0px) and (max-width: 668px) {
+        .app-bar {
+            margin-bottom: 2rem;
+            
+            &__items {
+                display: none;
+            }
+        }
+        .d-sm-none {
+            display: none;
+        }
     }
     
 </style>

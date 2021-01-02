@@ -39,8 +39,7 @@
                             color="btnColor"
                             class="white--text mb-4"
                             type="submit"
-                            :disabled="btn.disable"
-                            :loading=btn.loading
+                            :loading="isForgotLoading"
                             @click="resetPassword"
                         >
                             <span class="text-capitalize">request password reset</span>
@@ -67,11 +66,16 @@
 <script> 
 import { auth } from '../firebaseConfig'
 import router from '../router/index'
+import { mapState } from 'vuex'
 
 export default {
     name: "signin",
 
     components: {
+    },
+
+    computed: {
+        ...mapState(['isForgotLoading'])
     },
 
     data() {
@@ -156,8 +160,6 @@ export default {
             padding: 0 1.2rem;
             text-align: center;
             margin: 0 auto;
-            // max-width: 40% !important;
-            // min-width: 100% !important;
         }
 
         &__desc {
@@ -220,6 +222,33 @@ export default {
 
         &__spotify {
             color: rgb(8, 195, 103) !important;
+        }
+    }
+
+    @media screen and (min-width: 0px) and (max-width: 868px) {
+        .sheet-bar {
+            width: 100%;
+
+            &__brand {
+                width: 8rem;
+                margin-left: .5rem;
+            }
+
+            &__action {
+                margin-right: .5rem;
+                div {
+                    display: none;
+                }
+            }
+        }
+
+        .main {
+            text-align: center !important;
+
+            &__content {
+                margin: 0 auto;
+                width: 100%;
+            }
         }
     }
 </style>

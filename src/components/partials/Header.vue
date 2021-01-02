@@ -2,7 +2,7 @@
     <div name="header">
         <v-container class="white header__container">
             <v-row class="pt-6">
-                <v-col cols="5">
+                <v-col sm="12" md="5" cols="12">
                     <div class="primary--text header__heading">
                         Rhythms that Enriches the Soul
                     </div>
@@ -20,7 +20,7 @@
                         <span>Get Started</span>
                     </v-btn>
                 </v-col>
-                <v-col cols="7">
+                <v-col sm="12" md="7" cols="12">
                     <div class="header__hero">
                         <img src="../../assets/hero.png" alt="hero.png"/>
                     </div>

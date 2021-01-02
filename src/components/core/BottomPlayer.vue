@@ -2,9 +2,10 @@
 <template>
 <!-- eslint-disable -->
     <v-bottom-navigation
+        v-show="isPlaying"
         fixed
         min-height="150"
-        background-color="accent"
+        background-color="white"
     >
         <div class="bottom-plyr">
             <div class="bottom-plyr__media">
@@ -17,34 +18,11 @@
                 </div>
             </div>
             <div class="bottom-plyr__btns">
-                <!-- <v-btn
-                    icon
-                >
-                    <v-icon class="icon">mdi-skip-previous</v-icon>
-                </v-btn> -->
-
-                <!-- <v-btn
-                    v-if="isPlaying"
-                    icon
-                >
-                    <v-icon class="icon">mdi-pause</v-icon>
-                </v-btn>
-                <v-btn
-                    v-else
-                    icon
-                >
-                    <v-icon class="icon">mdi-play</v-icon>
-                </v-btn> -->
-
-                <!-- <v-btn
-                    icon
-                >
-                    <v-icon class="icon">mdi-skip-next</v-icon>
-                </v-btn> -->
+                
             </div>
 
             <div>
-                <vuetify-audio :file="selectedTrack.src" color="btnColor" :ended="audioFinish" downloadable></vuetify-audio>
+                <vuetify-audio :file="selectedTrack.src" :ended="audioFinished"   downloadable color="btnColor" class="accent" style="background: transparent !important;"></vuetify-audio>
             </div>
         </div>
     </v-bottom-navigation>
@@ -61,7 +39,7 @@ export default {
 
 
     computed: {
-        ...mapState(['selectedTrack'])
+        ...mapState(['selectedTrack', 'isPlaying'])
     },
 
     created() {
@@ -75,7 +53,10 @@ export default {
     },
 
     methods: {
-        
+        audioFinished() {
+            var vm = this
+            vm.$store.dispatch('audioFinished')
+        }
     }
 }
 </script>
@@ -184,4 +165,9 @@ export default {
     }
 
   }
+  @media screen and (min-width: 0px) and (max-width: 768px) {
+    .bottom-plyr__media {
+        display: none;
+    }
+}
 </style>

@@ -20,7 +20,7 @@
             </v-row>
             <v-card-text class="center-align mt-4 body-1">Or Sign in with</v-card-text>
             
-            <v-sheet min-width="40%" class="mt-2 form__container">
+            <v-sheet id="main__sheet" class="mt-2 form__container">
                 <v-form @submit.prevent>
                     <p class="overline text-capitalise form__desc">Your Email</p>
                     <v-text-field
@@ -50,8 +50,7 @@
                         class="white--text mb-4"
                         rounded
                         type="submit"
-                        :disabled="btn.disable"
-                        :loading=btn.loading
+                        :loading="isSigninLoading"
                         @click="login"
                     >
                         <span class="text-capitalize">Sign in</span>
@@ -63,12 +62,18 @@
 </template>
 
 <script> 
-import AuthToobar from '../components/core/AuthToolbar.vue';
+import AuthToobar from '../components/core/AuthToolbar.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: "Signin",
+
     components: {
         "auth-toolbar": AuthToobar,
+    },
+
+    computed: {
+        ...mapState(['isSigninLoading'])
     },
 
     async created() {
@@ -173,6 +178,16 @@ export default {
 
         &__spotify {
             color: rgb(8, 195, 103) !important;
+        }
+    }
+
+    #main__sheet {
+        width: 40%;
+    }
+
+    @media screen and (min-width: 0px) and (max-width: 868px) {
+        #main__sheet {
+            width: 100%;
         }
     }
 </style>

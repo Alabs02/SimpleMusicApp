@@ -4,6 +4,8 @@
     permanent
     color="accent"
     class="drawer"
+    mobile-breakpoint="728"
+    id="drawer-fixed"
     >
     <v-list-item class="px-2 py-2">
         <div class="drawer__brand">
@@ -130,5 +132,11 @@
             }
         }
         
+    }
+
+    @media screen and (min-width: 0px) and (max-width: 768px) {
+        #drawer-fixed {
+            display: none !important;
+        }
     }
 </style>

@@ -19,6 +19,11 @@ export default new Vuex.Store({
         isPlaying: false,
         isPaused: false,
         isStopped: false,
+
+        // => auth
+        isSigninLoading: false,
+        isSignupLoading: false,
+        isForgotLoading: false,
         
         selectedTrack: {
             title: "",
@@ -42,31 +47,48 @@ export default new Vuex.Store({
         SET_TRACK_LIST(state, payload) {
             state.tracks = payload
         },
-
         UPDATE_TRACK(state, payload) {
             state.selectedTrack.title = payload.title,
             state.selectedTrack.artist = payload.artist,
             state.selectedTrack.imgUrl = payload.imgUrl,
             state.selectedTrack.src = payload.src
+        },
+        UPDATE_SIGNIN_BTN(state, payload) {
+            state.isSigninLoading = payload
+        },
+        UPDATE_SIGNUP_BTN(state, payload) {
+            state.isSignupLoading = payload
+        },
+        UPDATE_NAV_VISIBILITY(state, payload) {
+            state.isPlaying = payload
         }
 
     },
     actions: {
-        loadTrack({ commit }, data) {
+        playTrack({ commit }, data) {
             console.log("Data track in state: ", data)
             commit('UPDATE_TRACK', data)
+            commit('UPDATE_NAV_VISIBILITY', true)
+        },
+
+        audioFinished({ commit }) {
+            commit('UPDATE_NAV_VISIBILITY', false)
         },
         // Login logic
-        async login({ dispatch }, form) {
+        async login({ dispatch, commit }, form) {
             console.log(form);
+
+            commit('UPDATE_SIGNIN_BTN', true)
             // Sign User in
             const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password)
 
             dispatch('fetchUserProfile', user);
         },
         // signup logic
-        async signup({ dispatch }, form) {
+        async signup({ dispatch, commit }, form) {
             console.log(form)
+
+            commit('UPDATE_SIGNUP_BTN', true);
             // Signup user
             const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password)
 
@@ -95,6 +117,8 @@ export default new Vuex.Store({
 
             // change route to dashboard
             if (router.currentRoute.path === '/signin' || router.currentRoute.path === '/signup' || router.currentRoute.path === '/') {
+                commit('UPDATE_SIGNIN_BTN', false);
+                commit('UPDATE_SIGNUP_BTN', false);
                 router.push('/dashboard')
             }
         },
