@@ -30,6 +30,7 @@
                                     :key="i"
                                     outlined
                                     class="mr-2"
+                                    @click="alertSnackbar(item.vendor)"
                                 >
                                     <v-icon :class=item.color>{{item.icon}}</v-icon>
                                 </v-btn>
@@ -68,10 +69,12 @@
                                 <v-text-field
                                     v-model.trim="signupForm.password"
                                     outlined
-                                    type="password"
+                                    :type="showSignupP ? 'text' : 'password'"
                                     label="Password"
                                     hint="********"
-                                    append-icon="mdi-eye"
+                                    :append-icon="showSignupP ? 'mdi-eye' : 'mdi-eye-off'"
+                                    @click:append="showSignupP = !showSignupP"
+                                    @keydown.enter="signup"
                                 ></v-text-field>
                                 
                                 <v-btn
@@ -98,7 +101,25 @@
                         </div>
                     </v-col>
                 </v-row>
-                
+                <v-snackbar
+                    v-model="snackbar"
+                    :timeout="timeout"
+                    color="white"
+                    top
+                >
+                    <span class="primary--text" v-text="snackbarText"></span>
+
+                    <template v-slot:action="{ attrs }">
+                        <v-btn
+                        color="blue"
+                        text
+                        v-bind="attrs"
+                        @click="snackbar = false"
+                        >
+                        Close
+                        </v-btn>
+                    </template>
+                </v-snackbar>
             </v-sheet>
         </div>
     </div>
@@ -119,11 +140,15 @@ export default {
 
     data() {
         return {
+            showSignupP: false,
+            snackbar: false,
+            timeout: 2000,
+            snackbarText: "",
             existingAccts: [
-                { icon: "mdi-google", color: "color__google" },
-                { icon: "mdi-facebook", color: "color__fb" },
-                { icon: "mdi-twitter", color: "color__twitter" },
-                { icon: "mdi-spotify", color: "color__spotify" },
+                { icon: "mdi-google", color: "color__google", vendor: "Google" },
+                { icon: "mdi-facebook", color: "color__fb", vendor: "Facebook" },
+                { icon: "mdi-twitter", color: "color__twitter", vendor: "Twitter" },
+                { icon: "mdi-spotify", color: "color__spotify", vendor: "Spotify" },
             ],
 
             btn: {
@@ -149,7 +174,13 @@ export default {
                 email: vm.signupForm.email,
                 password: vm.signupForm.password,
             })
-        }
+        },
+
+        alertSnackbar(vendor) {
+            var vm = this
+            vm.snackbarText = `${vendor} authentication is not implemented at the moment!`
+            vm.snackbar = true
+        },
     }
 }
 </script>

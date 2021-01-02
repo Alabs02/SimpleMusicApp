@@ -14,6 +14,7 @@
                     color="black"
                     outlined
                     class="px-2 mr-4 mb-2"
+                    @click="alertSnackbar(item.vendor)"
                 >
                     <v-icon :class=item.color>{{ item.icon }}</v-icon>
                 </v-btn>
@@ -37,10 +38,12 @@
                     <v-text-field
                         v-model.trim="loginForm.password"
                         outlined
-                        type="password"
+                        :type="showSigninP ? 'text' : 'password'"
                         label="Password"
-                        append-icon="mdi-eye"
                         hint="*********"
+                        :append-icon="showSigninP ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="showSigninP = !showSigninP"
+                        @keydown.enter="login"
                     ></v-text-field>
 
                     <v-btn
@@ -57,6 +60,25 @@
                     </v-btn>
                 </v-form>
             </v-sheet>
+            <v-snackbar
+                v-model="snackbar"
+                :timeout="timeout"
+                top
+                color="white"
+            >
+                <span class="primary--text" v-text="snackbarText"></span>
+
+                <template v-slot:action="{ attrs }">
+                    <v-btn
+                    color="blue"
+                    text
+                    v-bind="attrs"
+                    @click="snackbar = false"
+                    >
+                    Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
        </div>
     </div>
 </template>
@@ -82,11 +104,15 @@ export default {
 
     data() {
         return {
+            showSigninP: false,
+            snackbar: false,
+            timeout: 2000,
+            snackbarText: "",
             existingAccts: [
-                { icon: "mdi-google", color: "color__google" },
-                { icon: "mdi-facebook", color: "color__fb" },
-                { icon: "mdi-twitter", color: "color__twitter" },
-                { icon: "mdi-spotify", color: "color__spotify" },
+                { icon: "mdi-google", color: "color__google", vendor: "Google" },
+                { icon: "mdi-facebook", color: "color__fb", vendor: "Facebook" },
+                { icon: "mdi-twitter", color: "color__twitter", vendor: "Twitter" },
+                { icon: "mdi-spotify", color: "color__spotify", vendor: "Spotify" },
             ],
             
             btn: {
@@ -108,6 +134,12 @@ export default {
                 email: vm.loginForm.email,
                 password: vm.loginForm.password,
             })
+        },
+
+        alertSnackbar(vendor) {
+            var vm = this
+            vm.snackbarText = `${vendor} authentication is not implemented at the moment!`
+            vm.snackbar = true
         },
     }
 }
