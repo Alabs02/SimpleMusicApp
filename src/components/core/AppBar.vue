@@ -34,7 +34,7 @@
                 rounded
                 outlined
                 color="black mr-2"
-                class="text-capitalize d-sm-none"
+                class="text-capitalize langBtn"
             >
                 <v-img
                 width="20"
@@ -130,7 +130,7 @@ export default {
                 display: none;
             }
         }
-        .d-sm-none {
+        .langBtn {
             display: none;
         }
     }

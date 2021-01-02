@@ -224,28 +224,6 @@ export default {
 
             recommededList: [],
 
-            // recentList: [
-            //     {
-            //         color: '#952175',
-            //         src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-            //         title: 'Halcyon Days',
-            //         artist: 'Ellie Goulding',
-            //     },
-
-            //     {
-            //         color: 'blue',
-            //         src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-            //         title: 'Halcyon Days',
-            //         artist: 'Ellie Goulding',
-            //     },
-
-            //     {
-            //         color: 'indigo darken-2',
-            //         src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-            //         title: 'Halcyon Days',
-            //         artist: 'Ellie Goulding',
-            //     },
-            // ],
         }
     },
 
